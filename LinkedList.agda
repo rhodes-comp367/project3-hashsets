@@ -22,3 +22,23 @@ size : {A : Set} → LinkedList A → Nat
 size [] = 0
 size (node xs x) = 1 + (size xs)
 
+
+--Ellen's Removing Shenanigans 
+-- checking if the numbers are equal + that we are removing the correct node 
+-- mostly chat code, and noting here that we may have problems if there are nodes with same Nats
+
+natEq : Nat → Nat → Bool 
+natEq zero zero = true
+natEq (suc n) (suc m) = natEq n m
+natEq _ _ = false
+
+remove : {A : Set} → (x : A) → (xs : LinkedList A) → (A → A → Bool) → LinkedList A -- chat helped me figure out the starting cases
+-- base case
+remove x [] natEq = []
+-- removing element in end of list 
+-- remove x (y :: ys) natEq with natEq x y
+-- ... | true  = ys
+-- ... | false = y :: remove x ys natEq
+
+-- removing element at end of list 
+-- removing element in the middle of list 
