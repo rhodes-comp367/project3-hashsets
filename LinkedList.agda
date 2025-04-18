@@ -8,7 +8,6 @@ data LinkedList (A : Set) : Set where
     [] : LinkedList A
     node : LinkedList A → A → LinkedList A -- node adds A to the end of the linked list
 
-
 -- add an element to the front of a list. 
 ll-add : {A : Set} → (A → A → Bool) → A → LinkedList A → LinkedList A -- ChatGPT suggested for me to use a function within to compare two values
 ll-add f x [] = node [] x
