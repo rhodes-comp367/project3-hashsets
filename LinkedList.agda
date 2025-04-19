@@ -31,11 +31,11 @@ natEq zero zero = true
 natEq (suc n) (suc m) = natEq n m
 natEq _ _ = false
 
-remove : {A : Set} → (x : A) → (xs : LinkedList A) → (A → A → Bool) → LinkedList A -- chat helped me figure out the starting cases
+-- removeFirst : {A : Set} → (x : A) → (xs : LinkedList A) → (A → A → Bool) → LinkedList A -- chat helped me figure out the starting cases
 -- base case
-remove x [] natEq = []
+-- removeFirst x [] natEq = []
 -- removing element in end of list 
--- remove x (y :: ys) natEq with natEq x y
+-- removeFirst x (y :: ys) natEq with natEq x y
 -- ... | true  = ys
 -- ... | false = y :: remove x ys natEq
 
