@@ -36,15 +36,20 @@ size (node xs x) = 1 + (size xs)
 
 -- removing the first item from a list  
 removeFirst : {A : Set} → LinkedList A → LinkedList A 
+
 removeFirst [] = []
 -- I know this is broken Matthew shhhh
-removeFirst (node x xs) = {!   !} 
+-- need to figure out how to add x to the beginning 
+-- add f x []
+removeFirst (node xs x) = {!   !} 
 
 --removing the last item from a list (x) 
 removeLast : {A : Set} → LinkedList A → LinkedList A 
 removeLast [] = [] 
 -- need to change this to reflect removing last 
-removeLast (node x xs) = {!   !} 
+-- need to figure out how to add x to the end 
+-- add f x []
+removeLast (node xs x) = {!   !} 
 
 
 -- Ellen's crashout ... ignore below
