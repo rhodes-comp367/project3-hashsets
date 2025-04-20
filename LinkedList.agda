@@ -21,15 +21,27 @@ size : {A : Set} → LinkedList A → Nat
 size [] = 0
 size (node xs x) = 1 + (size xs)
 
+-- removing the first item from a list  
+removeFirst : {A : Set} → LinkedList A → LinkedList A 
+removeFirst [] = []
+-- I know this is broken Matthew shhhh
+removeFirst (node x xs) = {!   !} 
 
---Ellen's Removing Shenanigans 
+--removing the last item from a list (x) 
+removeLast : {A : Set} → LinkedList A → LinkedList A 
+removeLast [] = [] 
+-- need to change this to reflect removing last 
+removeLast (node x xs) = {!   !} 
+
+
+-- Ellen's crashout ... ignore below
 -- checking if the numbers are equal + that we are removing the correct node 
 -- mostly chat code, and noting here that we may have problems if there are nodes with same Nats
 
-natEq : Nat → Nat → Bool 
-natEq zero zero = true
-natEq (suc n) (suc m) = natEq n m
-natEq _ _ = false
+-- natEq : Nat → Nat → Bool 
+-- natEq zero zero = true
+-- natEq (suc n) (suc m) = natEq n m
+-- natEq _ _ = false
 
 -- removeFirst : {A : Set} → (x : A) → (xs : LinkedList A) → (A → A → Bool) → LinkedList A -- chat helped me figure out the starting cases
 -- base case
