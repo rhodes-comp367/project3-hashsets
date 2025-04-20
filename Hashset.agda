@@ -3,6 +3,8 @@ module Hashset where
 open import Agda.Builtin.Nat
     using (_+_; _*_; Nat; suc; zero)
 open import Data.Nat.DivMod
+open import Data.Vec
+open import Agda.Builtin.Bool
 open import Fin
 open import LinkedList
 
@@ -15,7 +17,7 @@ data _≤_ : Nat → Nat → Set where -- https://plfa.inf.ed.ac.uk/Relations/#:
       -------------
     → suc m ≤ suc n
 
-record Hashset (A : Nat) : Set where 
+record Hashset (n : Nat) : Set where 
     constructor
         hashset
     field
@@ -24,11 +26,17 @@ record Hashset (A : Nat) : Set where
 
 -- return the index that the new set member should be placed in
 -- since we're only storing Nats, the hash code is simply the Nat, and we use mod to compute the bucket/index to store it in
-hash-index : {A : Nat} → (x : Nat) → Hashset A → Nat -- thinking we should use Fin since we're dealing with a finite range of numbers
+hash-index : {n : Nat} → (x : Nat) → Hashset n → Nat -- thinking we should use Fin since we're dealing with a finite range of numbers
 hash-index x (hashset (suc c) nz) = x % (suc c)
 
-add : {A : Nat} → (x : Nat) → Hashset A → Hashset A
+add : {n : Nat} → (x : Nat) → Hashset n → Hashset n
 add = {!    !}
 
-get : (A : Nat) → Hashset A → Nat
-get = {!   !}
+retrieve : {n : Nat} → (x : Nat) → Hashset n → Nat
+retrieve = {!   !}
+
+revoke : {n : Nat} → (x : Nat) → Hashset n → Hashset n
+revoke = {!   !}
+
+is-member : {n : Nat} → (x : Nat) → Hashset n → Bool
+is-member = {!   !}
