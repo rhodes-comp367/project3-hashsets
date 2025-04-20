@@ -1,19 +1,32 @@
+{-# OPTIONS --allow-unsolved-metas #-}
+
 module LinkedList where
 
 open import Agda.Builtin.Nat
 open import Agda.Builtin.Bool
 open import Agda.Builtin.Equality
 
+-- will need to change all the A's to Nats if we're only using Nats
+
+data Nat= : Nat → Nat → Set where
+  zero= : Nat= zero zero
+  suc= : ∀ {m n} → Nat= m n → Nat= (suc m) (suc n)
+
 data LinkedList (A : Set) : Set where
     [] : LinkedList A
     node : LinkedList A → A → LinkedList A -- node adds A to the end of the linked list
 
+data LinkedList= : LinkedList Nat → LinkedList Nat → Set where 
+    []= : LinkedList= [] []
+    node= : {x y : Nat} → {xs ys : LinkedList Nat} 
+        → Nat= x y → LinkedList= xs ys → LinkedList= (node xs x) (node ys y)
+
 -- add an element to the front of a list. 
-ll-add : {A : Set} → (A → A → Bool) → A → LinkedList A → LinkedList A -- ChatGPT suggested for me to use a function within to compare two values
-ll-add f x [] = node [] x
-ll-add f e (node xs x) with f e x
+add : {A : Set} → (A → A → Bool) → A → LinkedList A → LinkedList A -- ChatGPT suggested for me to use a function within to compare two values
+add f x [] = node [] x
+add f e (node xs x) with f e x
 ... | true = node xs x
-... | false = node (ll-add f e xs) x
+... | false = node (add f e xs) x
 
 
 -- number of nodes in a linked list
