@@ -1,3 +1,5 @@
+-- LinkedList data structure that only stores Nats --
+
 {-# OPTIONS --allow-unsolved-metas #-}
 
 module LinkedList where
@@ -5,8 +7,6 @@ module LinkedList where
 open import Agda.Builtin.Nat
 open import Agda.Builtin.Bool
 open import Agda.Builtin.Equality
-
--- will need to change all the A's to Nats if we're only using Nats
 
 data Nat= : Nat → Nat → Set where
   zero= : Nat= zero zero
@@ -21,28 +21,28 @@ data LinkedList= : LinkedList Nat → LinkedList Nat → Set where
     node= : {x y : Nat} → {xs ys : LinkedList Nat} 
         → Nat= x y → LinkedList= xs ys → LinkedList= (node xs x) (node ys y)
 
--- add an element to the list. 
-add : {A : Set} → (A → A → Bool) → A → LinkedList A → LinkedList A -- ChatGPT suggested for me to use a function within to compare two values
-add f x [] = node [] x
-add f e (node xs x) with f e x
+-- add a Nat to the list. 
+add : Nat → LinkedList Nat → LinkedList Nat -- ChatGPT suggested for me to use a function within to compare two values
+add x [] = node [] x
+add e (node xs x) with e == x
 ... | true = node xs x
-... | false = node (add f e xs) x
+... | false = node (add e xs) x
 
 
 -- number of nodes in a linked list
-size : {A : Set} → LinkedList A → Nat
+size : LinkedList Nat → Nat
 size [] = 0
 size (node xs x) = 1 + (size xs)
 
 -- removing the first item from a list  
-removeFirst : {A : Set} → LinkedList A → LinkedList A 
+removeFirst : LinkedList Nat → LinkedList Nat
 
 removeFirst [] = []
 removeFirst (node [] x) = []
 removeFirst (node xs x) = node (removeFirst xs) x
 
 --removing the last item from a list (x) 
-removeLast : {A : Set} → LinkedList A → LinkedList A 
+removeLast : LinkedList Nat → LinkedList Nat
 removeLast [] = [] 
 -- need to change this to reflect removing last 
 -- need to figure out how to add x to the end 
