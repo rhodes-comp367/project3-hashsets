@@ -9,6 +9,10 @@ open import Agda.Builtin.Bool
 open import Fin
 open import LinkedList
 
+-- We are to prove: 
+-- that when we put/remove, the hash number stays the same 
+
+
 data _≤_ : Nat → Nat → Set where -- https://plfa.inf.ed.ac.uk/Relations/#:~:text=The%20relation%20less%20than%20or,2%202%20%E2%89%A4%203%20...
   z≤n : ∀ {n : Nat}
       --------
@@ -32,7 +36,7 @@ hash-index : {n : Nat} → (x : Nat) → Hashset n → Nat -- thinking we should
 hash-index x (hashset (suc c) nz b) = x % (suc c)
 
 put : {n : Nat} → (x : Nat) → Hashset n → Hashset n
-put = {!    !}
+put x = {!    !}
 
 retrieve : {n : Nat} → (x : Nat) → Hashset n → Nat
 retrieve = {!   !}
