@@ -26,7 +26,7 @@ record Hashset (n : Nat) : Set where
     constructor
         hashset
     field
-        capacity : Nat
+        capacity : Nat -- number of slots in hashset 
         buckets : Vec (LinkedList Nat) capacity -- Vec's that store the linked lists  
         not-zero : 1 ≤ capacity -- the capacity must be at least 1 (might need to ask about this)
 
@@ -51,3 +51,5 @@ is-member = {!   !}
 idempotency : {n : Nat} → (x : Nat) → (hs : Hashset n) → put x (put x hs) ≡ put x hs
 idempotency x (hashset c b nz) = {!   !}
 
+contains : LinkedList Nat → LinkedList Nat 
+contains = ? 
