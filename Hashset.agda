@@ -9,6 +9,16 @@ open import Agda.Builtin.Bool
 open import Fin
 open import LinkedList
 
+-- Questions to ask Superdock:
+-- 1) Included a field that's meant to enforce a non-zero capacity.
+-- Is this all that needs to be done or do I need to do something else to enforce that constraint?
+
+-- 2) How should we incorporate Fin into this data structure? Guessing we'll need it since buckets are indexed.
+
+-- 3) Ask if the definition of add in LinkedList is correct. I decided to use the == operator since we decided to store only Nats.
+
+-- Any other question you want to ask.
+
 -- We are to prove: 
 -- that when we put/remove, the hash number stays the same 
 

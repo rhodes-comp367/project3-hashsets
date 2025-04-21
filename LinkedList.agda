@@ -28,15 +28,26 @@ add e (node xs x) with e == x
 ... | true = node xs x
 ... | false = node (add e xs) x
 
+-- check for existence of a Nat
+contains : Nat → LinkedList Nat → Bool
+contains x [] = false
+contains e (node xs x) with e == x
+... | true = true
+... | false = contains x xs
 
 -- number of nodes in a linked list
 size : LinkedList Nat → Nat
 size [] = 0
 size (node xs x) = 1 + (size xs)
 
+remove : (x : Nat) → LinkedList Nat → LinkedList Nat
+remove x [] = []
+remove e (node xs x) with e == x
+... | true = xs
+... | false = node (remove e xs) x
+
 -- removing the first item from a list  
 removeFirst : LinkedList Nat → LinkedList Nat
-
 removeFirst [] = []
 removeFirst (node [] x) = []
 removeFirst (node xs x) = node (removeFirst xs) x
@@ -44,11 +55,11 @@ removeFirst (node xs x) = node (removeFirst xs) x
 --removing the last item from a list (x) 
 removeLast : LinkedList Nat → LinkedList Nat
 removeLast [] = [] 
--- need to change this to reflect removing last 
--- need to figure out how to add x to the end 
--- add f x []
 removeLast (node xs x) = xs 
 
+-- removal properly removes Nat from linked list
+remove-size : (x : Nat) → (xs : LinkedList Nat) → LinkedList= xs (removeFirst (node xs x))
+remove-size = {!   !}
 
 -- Ellen's crashout ... ignore below
 -- checking if the numbers are equal + that we are removing the correct node 
