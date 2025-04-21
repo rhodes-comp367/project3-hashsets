@@ -14,14 +14,14 @@ data Nat= : Nat → Nat → Set where
 
 data LinkedList (A : Set) : Set where
     [] : LinkedList A
-    node : LinkedList A → A → LinkedList A -- node adds A to the end of the linked list
+    node : LinkedList A → A → LinkedList A -- add A to the end of the linked list
 
 data LinkedList= : LinkedList Nat → LinkedList Nat → Set where 
     []= : LinkedList= [] []
     node= : {x y : Nat} → {xs ys : LinkedList Nat} 
         → Nat= x y → LinkedList= xs ys → LinkedList= (node xs x) (node ys y)
 
--- add an element to the front of a list. 
+-- add an element to the list. 
 add : {A : Set} → (A → A → Bool) → A → LinkedList A → LinkedList A -- ChatGPT suggested for me to use a function within to compare two values
 add f x [] = node [] x
 add f e (node xs x) with f e x
@@ -38,10 +38,8 @@ size (node xs x) = 1 + (size xs)
 removeFirst : {A : Set} → LinkedList A → LinkedList A 
 
 removeFirst [] = []
--- I know this is broken Matthew shhhh
--- need to figure out how to add x to the beginning 
--- add f x []
-removeFirst (node xs x) = {!   !} 
+removeFirst (node [] x) = []
+removeFirst (node xs x) = node (removeFirst xs) x
 
 --removing the last item from a list (x) 
 removeLast : {A : Set} → LinkedList A → LinkedList A 
@@ -49,7 +47,7 @@ removeLast [] = []
 -- need to change this to reflect removing last 
 -- need to figure out how to add x to the end 
 -- add f x []
-removeLast (node xs x) = {!   !} 
+removeLast (node xs x) = xs 
 
 
 -- Ellen's crashout ... ignore below
