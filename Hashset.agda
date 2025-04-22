@@ -9,19 +9,8 @@ open import Agda.Builtin.Bool
 open import Fin
 open import LinkedList
 
--- Questions to ask Superdock:
--- 1) Included a field that's meant to enforce a non-zero capacity.
--- Is this all that needs to be done or do I need to do something else to enforce that constraint?
-
--- 2) How should we incorporate Fin into this data structure? Guessing we'll need it since buckets are indexed.
-
--- 3) Ask if the definition of add in LinkedList is correct. I decided to use the == operator since we decided to store only Nats.
-
--- Any other question you want to ask.
-
 -- We are to prove: 
 -- that when we put/remove, the hash number stays the same 
-
 
 data _≤_ : Nat → Nat → Set where -- https://plfa.inf.ed.ac.uk/Relations/#:~:text=The%20relation%20less%20than%20or,2%202%20%E2%89%A4%203%20...
   z≤n : ∀ {n : Nat}
@@ -32,21 +21,24 @@ data _≤_ : Nat → Nat → Set where -- https://plfa.inf.ed.ac.uk/Relations/#:
       -------------
     → suc m ≤ suc n
 
-record Hashset (n : Nat) : Set where 
+record Hashset (n : Nat) : Set where  -- n represents the capacity
     constructor
         hashset
     field
-        capacity : Nat -- number of slots in hashset 
-        buckets : Vec (LinkedList Nat) capacity -- Vec's that store the linked lists  
-        not-zero : 1 ≤ capacity -- the capacity must be at least 1 (might need to ask about this)
+        buckets : Vec (LinkedList Nat) n -- Vec's that store the linked lists  
+        not-zero : 1 ≤ n -- the capacity must be at least 1 (might need to ask about this)
+  
+-- mod that returns a Fin
+_fin%_ : {n : Nat} → Nat → Nat → Fin n 
+_fin%_ = {!   !}
 
 -- return the index that the new set member should be placed in
 -- since we're only storing Nats, the hash code is simply the Nat, and we use mod to compute the bucket/index to store it in
-hash-index : {n : Nat} → (x : Nat) → Hashset n → Nat -- thinking we should use Fin since we're dealing with a finite range of numbers
-hash-index x (hashset (suc c) nz b) = x % (suc c)
+hash-index : {n : Nat} → (x : Nat) → Hashset n → Fin n -- thinking we should use Fin since we're dealing with a finite range of numbers
+hash-index {n} x (hashset b nz) = {!   !} fin% {!   !}
 
 put : {n : Nat} → (x : Nat) → Hashset n → Hashset n
-put x = {!    !}
+put = {!    !}
 
 retrieve : {n : Nat} → (x : Nat) → Hashset n → Nat
 retrieve = {!   !}
@@ -59,7 +51,4 @@ is-member = {!   !}
 
 -- inserting the same item more than once always produces the same hashset (i.e. subsequent insertions of 'x' will not change anything)
 idempotency : {n : Nat} → (x : Nat) → (hs : Hashset n) → put x (put x hs) ≡ put x hs
-idempotency x (hashset c b nz) = {!   !}
-
-contains : LinkedList Nat → LinkedList Nat 
-contains = ? 
+idempotency x (hashset b nz) = {!    !}
