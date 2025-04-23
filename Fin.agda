@@ -6,12 +6,12 @@ open import Agda.Builtin.Nat
   using (Nat; suc; zero)
 
 data Fin : Nat → Set where
-  zero : ∀ {n}
+  fzero : ∀ {n}
     → Fin (suc n)
-  suc : ∀ {n} → Fin n
+  fsuc : ∀ {n} → Fin n
     → Fin (suc n)
   
   
 maximum : {n : Nat} → Fin (suc n)
-maximum {zero} = zero
-maximum {suc n} = suc maximum
+maximum {zero} = fzero
+maximum {suc n} = fsuc maximum

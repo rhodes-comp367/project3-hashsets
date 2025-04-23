@@ -21,36 +21,37 @@ data _≤_ : Nat → Nat → Set where -- https://plfa.inf.ed.ac.uk/Relations/#:
       -------------
     → suc m ≤ suc n
 
-record Hashset : Set where  -- n represents the capacity
+record Hashset (n : Nat) : Set where  -- n represents the capacity
     constructor
         hashset
     field
-        capacity : Nat
-        buckets : Vec (LinkedList Nat) (suc capacity) -- Vec's that store the linked lists  
+        buckets : Vec (LinkedList Nat) n -- Vec's that store the linked lists  
+        not-zero : 1 ≤ n -- the capacity must be at least 1 (might need to ask about this)
 
 -- converting Nat → Fin 
-
-convertFin : {n : Nat} → Nat → Fin (suc n)  
-convertFin zero = {!   !}
-convertFin (suc n) = {!   !}
-
+ 
+convertFin : {n : Nat} → Fin (suc n)  
+convertFin {zero} = fzero
+convertFin {suc n} = fsuc convertFin
 
 -- mod that returns a Fin
-_fin%_ : {n : Nat} → Nat → Nat → Fin n 
-_fin%_ = {!   !}
+_fin%_ : {n : Nat} → Nat → Nat → Fin (suc n) 
+zero fin% zero = convertFin
+zero fin% suc n = fzero
+suc m fin% n = m fin% n
 
 -- return the index that the new set member should be placed in
 -- since we're only storing Nats, the hash code is simply the Nat, and we use mod to compute the bucket/index to store it in
-hash-index : {n : Nat} → (x : Nat) → Hashset → Fin n -- thinking we should use Fin since we're dealing with a finite range of numbers
-hash-index {n} x (hashset b nz) = {!   !} fin% {!   !}
+hash-index : {n : Nat} → (x : Nat) → Hashset n → Fin (suc n) -- thinking we should use Fin since we're dealing with a finite range of numbers
+hash-index {n} x (hashset b nz) = x fin% n
 
-put : {n : Nat} → (x : Nat) → Hashset → Hashset
+put : {n : Nat} → (x : Nat) → Hashset n → Hashset n
 put = {!    !}
 
-retrieve : {n : Nat} → (x : Nat) → Hashset → Nat
+retrieve : {n : Nat} → (x : Nat) → Hashset n → Nat
 retrieve = {!   !}
 
-revoke : {n : Nat} → (x : Nat) → Hashset → Hashset n
+revoke : {n : Nat} → (x : Nat) → Hashset n → Hashset n
 revoke = {!   !}
 
 is-member : {n : Nat} → (x : Nat) → Hashset n → Bool
