@@ -21,29 +21,36 @@ data _≤_ : Nat → Nat → Set where -- https://plfa.inf.ed.ac.uk/Relations/#:
       -------------
     → suc m ≤ suc n
 
-record Hashset (n : Nat) : Set where  -- n represents the capacity
+record Hashset : Set where  -- n represents the capacity
     constructor
         hashset
     field
-        buckets : Vec (LinkedList Nat) n -- Vec's that store the linked lists  
-        not-zero : 1 ≤ n -- the capacity must be at least 1 (might need to ask about this)
-  
+        capacity : Nat
+        buckets : Vec (LinkedList Nat) (suc capacity) -- Vec's that store the linked lists  
+
+-- converting Nat → Fin 
+
+convertFin : {n : Nat} → Nat → Fin (suc n)  
+convertFin zero = {!   !}
+convertFin (suc n) = {!   !}
+
+
 -- mod that returns a Fin
 _fin%_ : {n : Nat} → Nat → Nat → Fin n 
 _fin%_ = {!   !}
 
 -- return the index that the new set member should be placed in
 -- since we're only storing Nats, the hash code is simply the Nat, and we use mod to compute the bucket/index to store it in
-hash-index : {n : Nat} → (x : Nat) → Hashset n → Fin n -- thinking we should use Fin since we're dealing with a finite range of numbers
+hash-index : {n : Nat} → (x : Nat) → Hashset → Fin n -- thinking we should use Fin since we're dealing with a finite range of numbers
 hash-index {n} x (hashset b nz) = {!   !} fin% {!   !}
 
-put : {n : Nat} → (x : Nat) → Hashset n → Hashset n
+put : {n : Nat} → (x : Nat) → Hashset → Hashset
 put = {!    !}
 
-retrieve : {n : Nat} → (x : Nat) → Hashset n → Nat
+retrieve : {n : Nat} → (x : Nat) → Hashset → Nat
 retrieve = {!   !}
 
-revoke : {n : Nat} → (x : Nat) → Hashset n → Hashset n
+revoke : {n : Nat} → (x : Nat) → Hashset → Hashset n
 revoke = {!   !}
 
 is-member : {n : Nat} → (x : Nat) → Hashset n → Bool
