@@ -40,7 +40,7 @@ hash-index {suc n} x (hashset b nz) = mod x n
 --applying Nat into Vector 
 
 vec-apply : {A : Set} → {n : Nat} → Fin n → (A → A) → Vec A n → Vec A n
-vec-apply = {!   !} 
+vec-apply (hash-index x y)  = {!  !} 
 
 put : {n : Nat} → (x : Nat) → Hashset n → Hashset n
 put x (hashset b nz) = hashset (vec-apply (hash-index {!   !}   {!   !}) (add x) b) nz
