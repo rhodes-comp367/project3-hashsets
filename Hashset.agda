@@ -34,11 +34,16 @@ mod (suc m) n = increment (mod m n)
 
 -- return the index that the new set member should be placed in
 -- since we're only storing Nats, the hash code is simply the Nat, and we use mod to compute the bucket/index to store it in
-hash-index : {n : Nat} → (x : Nat) → Hashset n → Fin (suc n) 
-hash-index {n} x (hashset b nz) = mod x n
+hash-index : {n : Nat} → (x : Nat) → Hashset n → Fin n 
+hash-index {suc n} x (hashset b nz) = mod x n
+
+--applying Nat into Vector 
+
+vec-apply : {A : Set} → {n : Nat} → Fin n → (A → A) → Vec A n → Vec A n
+vec-apply = {!   !} 
 
 put : {n : Nat} → (x : Nat) → Hashset n → Hashset n
-put = {!    !}
+put x (hashset b nz) = hashset (vec-apply (hash-index {!   !}   {!   !}) (add x) b) nz
 
 retrieve : {n : Nat} → (x : Nat) → Hashset n → Nat
 retrieve = {!   !}
@@ -51,4 +56,4 @@ is-member = {!   !}
 
 -- inserting the same item more than once always produces the same hashset (i.e. subsequent insertions of 'x' will not change anything)
 idempotency : {n : Nat} → (x : Nat) → (hs : Hashset n) → put x (put x hs) ≡ put x hs
-idempotency x (hashset b nz) = {!    !}
+idempotency x (hashset b nz) = {!    !} 
