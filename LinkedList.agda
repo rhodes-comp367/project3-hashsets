@@ -16,24 +16,40 @@ data LinkedList (A : Set) : Set where
     [] : LinkedList A
     node : LinkedList A → A → LinkedList A -- add A to the end of the linked list
 
-data LinkedList= : LinkedList Nat → LinkedList Nat → Set where 
-    []= : LinkedList= [] []
-    node= : {x y : Nat} → {xs ys : LinkedList Nat} 
-        → Nat= x y → LinkedList= xs ys → LinkedList= (node xs x) (node ys y)
+data ⊥ : Set where
+
+⊥-elim : {A : Set} → ⊥ → A
+⊥-elim ()
+
+~ : Set → Set
+~ A = A → ⊥
+
+data Dec (A : Set) : Set where
+  yes : A → Dec A
+  no : ~ A → Dec A
+
+-- natural number equality is decidable
+nat-dec : (m n : Nat) → Dec (m ≡ n)
+nat-dec zero zero = yes refl
+nat-dec zero (suc _) = no (λ ())
+nat-dec (suc _) zero = no (λ ())
+nat-dec (suc m) (suc n) with nat-dec m n
+... | yes refl = yes refl
+... | no p = no (λ {refl → p refl})
 
 -- add a Nat to the list. 
 add : Nat → LinkedList Nat → LinkedList Nat -- ChatGPT suggested for me to use a function within to compare two values
 add x [] = node [] x
-add e (node xs x) with e == x
-... | true = node xs x
-... | false = node (add e xs) x
+add e (node xs x) with nat-dec e x
+... | yes _ = node xs x
+... | no _ = node (add e xs) x
 
 -- check for existence of a Nat
 contains : Nat → LinkedList Nat → Bool
 contains x [] = false
-contains e (node xs x) with e == x
-... | true = true
-... | false = contains x xs
+contains e (node xs x) with nat-dec e x
+... | yes _ = true
+... | no _ = contains x xs
 
 -- number of nodes in a linked list
 size : LinkedList Nat → Nat
@@ -42,9 +58,9 @@ size (node xs x) = 1 + (size xs)
 
 remove : (x : Nat) → LinkedList Nat → LinkedList Nat
 remove x [] = []
-remove e (node xs x) with e == x
-... | true = xs
-... | false = node (remove e xs) x
+remove e (node xs x) with nat-dec e x
+... | yes _ = xs
+... | no _ = node (remove e xs) x
 
 -- removing the first item from a list  
 removeFirst : LinkedList Nat → LinkedList Nat
@@ -57,9 +73,25 @@ removeLast : LinkedList Nat → LinkedList Nat
 removeLast [] = [] 
 removeLast (node xs x) = xs 
 
--- removal properly removes Nat from linked list
-remove-size : (x : Nat) → (xs : LinkedList Nat) → LinkedList= xs (removeFirst (node xs x))
-remove-size = {!   !}
+remove-size' : (x : Nat) → (xs : LinkedList Nat) → xs ≡ (removeLast (node xs x))
+remove-size' _ _ = refl
+
+-- linked list contains element after being added in 
+add-contains : ∀ n ns → contains n (add n ns) ≡ true
+add-contains n [] with nat-dec n n
+... | yes _ = refl
+... | no ~e = ⊥-elim (~e refl)
+add-contains n (node ns x) with nat-dec n x 
+add-contains n (node ns x) | yes refl with nat-dec n n 
+...   | yes _ = refl
+...   | no ~e = ⊥-elim (~e refl)
+add-contains n (node ns x) | no ~e with nat-dec n x
+...   | yes _ = refl
+...   | no ~e' = ⊥-elim (~e {! ~e'  !})
+
+
+-- remove-contains
+-- add-remove
 
 -- Ellen's crashout ... ignore below
 -- checking if the numbers are equal + that we are removing the correct node 
@@ -80,3 +112,4 @@ remove-size = {!   !}
 
 -- removing element at end of list 
 -- removing element in the middle of list 
+ 

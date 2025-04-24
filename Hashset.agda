@@ -26,24 +26,16 @@ record Hashset (n : Nat) : Set where  -- n represents the capacity
         hashset
     field
         buckets : Vec (LinkedList Nat) n -- Vec's that store the linked lists  
-        not-zero : 1 ≤ n -- the capacity must be at least 1 (might need to ask about this)
+        not-zero : 1 ≤ n -- the capacity must be at least 1
 
--- converting Nat → Fin 
- 
-convertFin : {n : Nat} → Fin (suc n)  
-convertFin {zero} = fzero
-convertFin {suc n} = fsuc convertFin
-
--- mod that returns a Fin
-_fin%_ : {n : Nat} → Nat → Nat → Fin (suc n) 
-zero fin% zero = convertFin
-zero fin% suc n = fzero
-suc m fin% n = m fin% n
+mod : Nat → (n : Nat) → Fin (suc n)
+mod zero _ = zero
+mod (suc m) n = {!   !}
 
 -- return the index that the new set member should be placed in
 -- since we're only storing Nats, the hash code is simply the Nat, and we use mod to compute the bucket/index to store it in
-hash-index : {n : Nat} → (x : Nat) → Hashset n → Fin (suc n) -- thinking we should use Fin since we're dealing with a finite range of numbers
-hash-index {n} x (hashset b nz) = x fin% n
+hash-index : {n : Nat} → (x : Nat) → Hashset n → Fin (suc n) 
+hash-index {n} x (hashset b nz) = mod x n
 
 put : {n : Nat} → (x : Nat) → Hashset n → Hashset n
 put = {!    !}
