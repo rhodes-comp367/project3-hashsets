@@ -16,6 +16,10 @@ data LinkedList (A : Set) : Set where
     [] : LinkedList A
     node : LinkedList A → A → LinkedList A -- add A to the end of the linked list
 
+data Element {A : Set} (x : A) : LinkedList A → Set where
+  last : ∀ {xs} → Element x (node xs x)
+  init : ∀ {xs y} → Element x xs → Element x (node xs y)
+
 data ⊥ : Set where
 
 ⊥-elim : {A : Set} → ⊥ → A
@@ -44,12 +48,15 @@ add e (node xs x) with nat-dec e x
 ... | yes _ = node xs x
 ... | no _ = node (add e xs) x
 
+contains' : (x : Nat) → (xs : LinkedList Nat) → Dec (Element x xs)
+contains' = ?
+
 -- check for existence of a Nat
 contains : Nat → LinkedList Nat → Bool
 contains x [] = false
 contains e (node xs x) with nat-dec e x
 ... | yes _ = true
-... | no _ = contains x xs
+... | no _ = contains e xs
 
 -- number of nodes in a linked list
 size : LinkedList Nat → Nat
@@ -81,27 +88,33 @@ add-contains : ∀ n ns → contains n (add n ns) ≡ true
 add-contains n [] with nat-dec n n
 ... | yes _ = refl
 ... | no ~e = ⊥-elim (~e refl)
-
 add-contains n (node ns x) with nat-dec n x 
 add-contains n (node ns x) | yes refl with nat-dec n n 
 ...   | yes _ = refl
 ...   | no ~e = ⊥-elim (~e refl)
 add-contains n (node ns x) | no _ with nat-dec n x
 ...   | yes _ = refl
-...   | no ~e = {!   !}
+...   | no ~e = add-contains n ns
+
 
 
 -- remove-contains
 
+add-element : ∀ x xs → Element x (add x xs)
+add-element = ?
+
+remove-add : {x : Nat} → {xs : LinkedList Nat} → Element x xs → add x (remove x xs) ≡ xs
+remove-add = {!   !}
+
 -- adding then removing returns the same linked list
-add-remove : (x : Nat) → (xs : LinkedList Nat) → xs ≡ remove x (add x xs)
+add-remove : (x : Nat) → (xs : LinkedList Nat) → remove x xs ≡ remove x (add x xs)
 add-remove x [] with nat-dec x x
 ... | yes _ = refl
 ... | no ~e = ⊥-elim (~e refl)
 
 add-remove e (node xs x) with nat-dec e x
 add-remove e (node xs x) | yes refl with nat-dec e x
-...   | yes _ = {!    !}
+...   | yes refl = {!    !}
 ...   | no ~e = {!   !} 
 add-remove e (node xs x) | no _ with nat-dec e x
 ...   | yes _ = {!   !}
