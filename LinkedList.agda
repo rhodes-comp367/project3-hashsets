@@ -73,25 +73,40 @@ removeLast : LinkedList Nat → LinkedList Nat
 removeLast [] = [] 
 removeLast (node xs x) = xs 
 
-remove-size' : (x : Nat) → (xs : LinkedList Nat) → xs ≡ (removeLast (node xs x))
-remove-size' _ _ = refl
+remove-last-node : (x : Nat) → (xs : LinkedList Nat) → xs ≡ (removeLast (node xs x))
+remove-last-node _ _ = refl
 
 -- linked list contains element after being added in 
 add-contains : ∀ n ns → contains n (add n ns) ≡ true
 add-contains n [] with nat-dec n n
 ... | yes _ = refl
 ... | no ~e = ⊥-elim (~e refl)
+
 add-contains n (node ns x) with nat-dec n x 
 add-contains n (node ns x) | yes refl with nat-dec n n 
 ...   | yes _ = refl
 ...   | no ~e = ⊥-elim (~e refl)
-add-contains n (node ns x) | no ~e with nat-dec n x
+add-contains n (node ns x) | no _ with nat-dec n x
 ...   | yes _ = refl
-...   | no ~e' = ⊥-elim (~e {! ~e'  !})
+...   | no ~e = {!   !}
 
 
 -- remove-contains
--- add-remove
+
+-- adding then removing returns the same linked list
+add-remove : (x : Nat) → (xs : LinkedList Nat) → xs ≡ remove x (add x xs)
+add-remove x [] with nat-dec x x
+... | yes _ = refl
+... | no ~e = ⊥-elim (~e refl)
+
+add-remove e (node xs x) with nat-dec e x
+add-remove e (node xs x) | yes refl with nat-dec e x
+...   | yes _ = {!    !}
+...   | no ~e = {!   !} 
+add-remove e (node xs x) | no _ with nat-dec e x
+...   | yes _ = {!   !}
+...   | no ~e = {!   !}
+
 
 -- Ellen's crashout ... ignore below
 -- checking if the numbers are equal + that we are removing the correct node 

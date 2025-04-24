@@ -30,7 +30,7 @@ record Hashset (n : Nat) : Set where  -- n represents the capacity
 
 mod : Nat → (n : Nat) → Fin (suc n)
 mod zero _ = zero
-mod (suc m) n = {!   !}
+mod (suc m) n = increment (mod m n)
 
 -- return the index that the new set member should be placed in
 -- since we're only storing Nats, the hash code is simply the Nat, and we use mod to compute the bucket/index to store it in
