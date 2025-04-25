@@ -45,18 +45,20 @@ temp_add e (node xs x) with nat-dec e x
 ... | no _ = node (add e xs) x
 
 vec-apply : {A : Set} → {n : Nat} → Fin n → (A → A) → Vec A n → Vec A n
-vec-apply zero temp_add (x ∷ xs) = {! !} 
-vec-apply (suc a) temp_add (x ∷ xs) = {!   !} 
+vec-apply zero f (x ∷ xs) = f x ∷ xs
+vec-apply (suc a) f (x ∷ xs) = x ∷ vec-apply a f xs
 
 put : {n : Nat} → (x : Nat) → Hashset n → Hashset n
-put x (hashset b nz) = hashset (vec-apply (hash-index {!   !}   {!   !}) (add x) b) nz
+put x (hashset b nz) = hashset (vec-apply (hash-index x  (hashset b nz)) (add x) b) nz
 
 retrieve : {n : Nat} → (x : Nat) → Hashset n → Nat
 retrieve x (hashset b nz) = x --umm.. 90% sure this is incorrect
 
 revoke : {n : Nat} → (x : Nat) → Hashset n → Hashset n
-revoke x (hashset b nz) = {!   !}
+revoke x (hashset b nz) = hashset b nz
 
+
+-- needs helper 
 is-member : {n : Nat} → (x : Nat) → Hashset n → Bool
 is-member x (hashset b nz) = {!   !}
 
