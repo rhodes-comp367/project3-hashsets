@@ -49,7 +49,7 @@ add e (node xs x) with nat-dec e x
 ... | no _ = node (add e xs) x
 
 contains' : (x : Nat) → (xs : LinkedList Nat) → Dec (Element x xs)
-contains' = ?
+contains' = {!   !}
 
 -- check for existence of a Nat
 contains : Nat → LinkedList Nat → Bool
@@ -101,7 +101,7 @@ add-contains n (node ns x) | no _ with nat-dec n x
 -- remove-contains
 
 add-element : ∀ x xs → Element x (add x xs)
-add-element = ?
+add-element = {!   !}
 
 remove-add : {x : Nat} → {xs : LinkedList Nat} → Element x xs → add x (remove x xs) ≡ xs
 remove-add = {!   !}

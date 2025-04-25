@@ -37,23 +37,31 @@ mod (suc m) n = increment (mod m n)
 hash-index : {n : Nat} → (x : Nat) → Hashset n → Fin n 
 hash-index {suc n} x (hashset b nz) = mod x n
 
---applying Nat into Vector 
+-- temp add function (taken from linkedlist) ...I kept forgetting what went into add (Ellen)   
+temp_add : Nat → LinkedList Nat → LinkedList Nat 
+temp_add x [] = node [] x
+temp_add e (node xs x) with nat-dec e x
+... | yes _ = node xs x
+... | no _ = node (add e xs) x
 
 vec-apply : {A : Set} → {n : Nat} → Fin n → (A → A) → Vec A n → Vec A n
-vec-apply (hash-index x y)  = {!  !} 
+vec-apply zero temp_add (x ∷ xs) = {! !} 
+vec-apply (suc a) temp_add (x ∷ xs) = {!   !} 
 
 put : {n : Nat} → (x : Nat) → Hashset n → Hashset n
 put x (hashset b nz) = hashset (vec-apply (hash-index {!   !}   {!   !}) (add x) b) nz
 
 retrieve : {n : Nat} → (x : Nat) → Hashset n → Nat
-retrieve = {!   !}
+retrieve x (hashset b nz) = x --umm.. 90% sure this is incorrect
 
 revoke : {n : Nat} → (x : Nat) → Hashset n → Hashset n
-revoke = {!   !}
+revoke x (hashset b nz) = {!   !}
 
 is-member : {n : Nat} → (x : Nat) → Hashset n → Bool
-is-member = {!   !}
+is-member x (hashset b nz) = {!   !}
+
 
 -- inserting the same item more than once always produces the same hashset (i.e. subsequent insertions of 'x' will not change anything)
 idempotency : {n : Nat} → (x : Nat) → (hs : Hashset n) → put x (put x hs) ≡ put x hs
-idempotency x (hashset b nz) = {!    !} 
+idempotency zero  = {!   !}
+idempotency (suc x) (hashset b nz) = {!   !}  
