@@ -49,18 +49,22 @@ vec-apply zero f (x ∷ xs) = f x ∷ xs
 vec-apply (suc a) f (x ∷ xs) = x ∷ vec-apply a f xs
 
 put : {n : Nat} → (x : Nat) → Hashset n → Hashset n
-put x (hashset b nz) = hashset (vec-apply (hash-index x  (hashset b nz)) (add x) b) nz
+put x (hashset b nz) = hashset (vec-apply (hash-index x (hashset b nz)) (add x) b) nz
 
 retrieve : {n : Nat} → (x : Nat) → Hashset n → Nat
-retrieve x (hashset b nz) = x --umm.. 90% sure this is incorrect
+retrieve x (hashset b nz) = {!   !}
+-- retrieve x (hashset b nz) = x --umm.. 90% sure this is incorrect. This is indeed incorrect.
 
 revoke : {n : Nat} → (x : Nat) → Hashset n → Hashset n
-revoke x (hashset b nz) = hashset b nz
+revoke x (hashset b nz) = hashset (vec-apply (hash-index x (hashset b nz)) (LinkedList.remove x) b) nz
 
 
--- needs helper 
-mem-bool : {n : Nat} → (x : Nat) → Hashset n → Bool
-mem-bool = {!   !} 
+-- checking if in linkedlist 
+mem-bool :  Nat → LinkedList Nat → Bool
+mem-bool  x [] = false 
+mem-bool x ( node xs y ) with nat-dec x y 
+... | yes _ = true
+... | no _ = mem-bool x xs 
 
 
 is-member : {n : Nat} → (x : Nat) → Hashset n → Bool
