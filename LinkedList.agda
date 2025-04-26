@@ -44,10 +44,6 @@ add e (node xs x) with nat-dec e x
 ... | yes _ = node xs x
 ... | no _ = node (add e xs) x
 
--- contains' : (x : Nat) → (xs : LinkedList Nat) → Dec (Element x xs)
--- contains' x [] = no λ ()
--- contains' e (node xs x) = yes {!   !}
-
 -- check for existence of a Nat
 contains : Nat → LinkedList Nat → Bool
 contains x [] = false
@@ -103,11 +99,15 @@ remove-contains n (node ns x) with nat-dec n x
 add-element : ∀ n ns → Element n (add n ns)
 add-element n [] = last
 add-element n (node ns x) with nat-dec n x 
-... | yes x₁ = init {!   !}
+... | yes x₁ = {!   !}
 ... | no _ = {!   !}
 
+-- removing and then adding gives back the same linked list
 remove-add : {x : Nat} → {xs : LinkedList Nat} → Element x xs → add x (remove x xs) ≡ xs
-remove-add = {!   !}
+remove-add {x} last with nat-dec x x
+... | yes _ = {!    !}
+... | no _ = {!   !}
+remove-add (init x) = {!   !}
 
 -- adding then removing returns the same linked list
 add-remove : (x : Nat) → (xs : LinkedList Nat) → ~ (Element x xs) → xs ≡ remove x (add x xs)
@@ -120,7 +120,7 @@ add-remove n (node xs x) p | yes refl with nat-dec n x
 ...   | no _ = ⊥-elim (p last)
 add-remove n (node xs x) p | no x₂ with nat-dec n x
 ...   | yes x₁ = ⊥-elim (x₂ x₁)
-...   | no ~e = {!    !}
+...   | no ~e = add-remove {!   !} {!   !} {!   !}
 
 -- Ellen's crashout ... ignore below
 -- checking if the numbers are equal + that we are removing the correct node 
