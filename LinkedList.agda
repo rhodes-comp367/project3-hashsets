@@ -8,10 +8,6 @@ open import Agda.Builtin.Nat
 open import Agda.Builtin.Bool
 open import Agda.Builtin.Equality
 
-data Nat= : Nat → Nat → Set where
-  zero= : Nat= zero zero
-  suc= : ∀ {m n} → Nat= m n → Nat= (suc m) (suc n)
-
 data LinkedList (A : Set) : Set where
     [] : LinkedList A
     node : LinkedList A → A → LinkedList A -- add A to the end of the linked list
@@ -48,8 +44,9 @@ add e (node xs x) with nat-dec e x
 ... | yes _ = node xs x
 ... | no _ = node (add e xs) x
 
-contains' : (x : Nat) → (xs : LinkedList Nat) → Dec (Element x xs)
-contains' = {!   !}
+-- contains' : (x : Nat) → (xs : LinkedList Nat) → Dec (Element x xs)
+-- contains' x [] = no λ ()
+-- contains' e (node xs x) = yes {!   !}
 
 -- check for existence of a Nat
 contains : Nat → LinkedList Nat → Bool
@@ -96,30 +93,34 @@ add-contains n (node ns x) | no _ with nat-dec n x
 ...   | yes _ = refl
 ...   | no ~e = add-contains n ns
 
-
-
 -- remove-contains
+remove-contains : ∀ n ns → contains n (remove n ns) ≡ false 
+remove-contains n [] = refl
+remove-contains n (node ns x) with nat-dec n x 
+... | yes _ = {!    !}
+... | no ~e = {!   !}
 
-add-element : ∀ x xs → Element x (add x xs)
-add-element = {!   !}
+add-element : ∀ n ns → Element n (add n ns)
+add-element n [] = last
+add-element n (node ns x) with nat-dec n x 
+... | yes x₁ = init {!   !}
+... | no _ = {!   !}
 
 remove-add : {x : Nat} → {xs : LinkedList Nat} → Element x xs → add x (remove x xs) ≡ xs
 remove-add = {!   !}
 
 -- adding then removing returns the same linked list
-add-remove : (x : Nat) → (xs : LinkedList Nat) → remove x xs ≡ remove x (add x xs)
-add-remove x [] with nat-dec x x
+add-remove : (x : Nat) → (xs : LinkedList Nat) → ~ (Element x xs) → xs ≡ remove x (add x xs)
+add-remove x [] p with nat-dec x x 
 ... | yes _ = refl
 ... | no ~e = ⊥-elim (~e refl)
-
-add-remove e (node xs x) with nat-dec e x
-add-remove e (node xs x) | yes refl with nat-dec e x
-...   | yes refl = {!    !}
-...   | no ~e = {!   !} 
-add-remove e (node xs x) | no _ with nat-dec e x
-...   | yes _ = {!   !}
-...   | no ~e = {!   !}
-
+add-remove n (node xs x) p with nat-dec n x
+add-remove n (node xs x) p | yes refl with nat-dec n x
+...   | yes _ = ⊥-elim (p last)
+...   | no _ = ⊥-elim (p last)
+add-remove n (node xs x) p | no x₂ with nat-dec n x
+...   | yes x₁ = ⊥-elim (x₂ x₁)
+...   | no ~e = {!    !}
 
 -- Ellen's crashout ... ignore below
 -- checking if the numbers are equal + that we are removing the correct node 
