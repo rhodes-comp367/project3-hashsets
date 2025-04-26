@@ -59,11 +59,16 @@ revoke x (hashset b nz) = hashset b nz
 
 
 -- needs helper 
+mem-bool : {n : Nat} → (x : Nat) → Hashset n → Bool
+mem-bool = {!   !} 
+
+
 is-member : {n : Nat} → (x : Nat) → Hashset n → Bool
-is-member x (hashset b nz) = {!   !}
+is-member zero (hashset b nz) = {!   !}
+is-member (suc x) (hashset b nz) = {!   !} 
 
 
 -- inserting the same item more than once always produces the same hashset (i.e. subsequent insertions of 'x' will not change anything)
 idempotency : {n : Nat} → (x : Nat) → (hs : Hashset n) → put x (put x hs) ≡ put x hs
-idempotency zero  = {!   !}
+idempotency zero a  = {!   !}
 idempotency (suc x) (hashset b nz) = {!   !}  
