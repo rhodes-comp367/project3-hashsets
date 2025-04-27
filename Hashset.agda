@@ -55,9 +55,13 @@ vec-apply (suc a) f (x ∷ xs) = x ∷ vec-apply a f xs
 put : {n : Nat} → (x : Nat) → Hashset n → Hashset n
 put x (hashset b nz) = hashset (vec-apply (hash-index x (hashset b nz)) (add x) b) nz
 
+-- index :  {A : Set} {n : Nat} → Vec A n → Fin n → A
+-- index x y  = {!   !} 
+
 retrieve : {n : Nat} → (x : Nat) → Hashset n → Maybe Nat
-retrieve x (hashset b nz) = {!    !}
--- retrieve x (hashset b nz) = x --umm.. 90% sure this is incorrect. This is indeed incorrect.
+retrieve x (hashset b nz) = get x {!   !}  
+
+-- retrieve x (hashset b nz) = x --umm.. 90% sure this is incorrect (ellen). This is indeed incorrect (matthew).
 
 revoke : {n : Nat} → (x : Nat) → Hashset n → Hashset n
 revoke x (hashset b nz) = hashset (vec-apply (hash-index x (hashset b nz)) (LinkedList.remove x) b) nz
@@ -72,7 +76,7 @@ mem-bool x ( node xs y ) with nat-dec x y
 
 
 is-member : {n : Nat} → (x : Nat) → Hashset n → Bool
-is-member x (hashset b nz) = {!    !}
+is-member x (hashset b nz) = contains x {!   !}
 
 
 -- inserting the same item more than once always produces the same hashset (i.e. subsequent insertions of 'x' will not change anything)
