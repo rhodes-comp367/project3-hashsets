@@ -8,6 +8,7 @@ open import Agda.Builtin.Equality
 open import Agda.Builtin.Bool
 open import Fin
 open import LinkedList
+open import Data.Maybe
 
 -- We are to prove: 
 -- that when we put/remove, the hash number stays the same 
@@ -27,10 +28,13 @@ record Hashset (n : Nat) : Set where  -- n represents the capacity
     field
         buckets : Vec (LinkedList Nat) n -- Vec's that store the linked lists  
         not-zero : 1 ≤ n -- the capacity must be at least 1
-
+-- hash-index 2 (hashset ((node (node [] 15) 5) ∷ (node [] 20) ∷ ((node [] 10) ∷ [])) (1≤3))
 mod : Nat → (n : Nat) → Fin (suc n)
 mod zero _ = zero
 mod (suc m) n = increment (mod m n)
+
+1≤3 : suc zero ≤ suc (suc (suc zero))
+1≤3 = s≤s z≤n
 
 -- return the index that the new set member should be placed in
 -- since we're only storing Nats, the hash code is simply the Nat, and we use mod to compute the bucket/index to store it in
@@ -51,8 +55,8 @@ vec-apply (suc a) f (x ∷ xs) = x ∷ vec-apply a f xs
 put : {n : Nat} → (x : Nat) → Hashset n → Hashset n
 put x (hashset b nz) = hashset (vec-apply (hash-index x (hashset b nz)) (add x) b) nz
 
-retrieve : {n : Nat} → (x : Nat) → Hashset n → Nat
-retrieve x (hashset b nz) = {!   !}
+retrieve : {n : Nat} → (x : Nat) → Hashset n → Maybe Nat
+retrieve x (hashset b nz) = {!    !}
 -- retrieve x (hashset b nz) = x --umm.. 90% sure this is incorrect. This is indeed incorrect.
 
 revoke : {n : Nat} → (x : Nat) → Hashset n → Hashset n
@@ -68,8 +72,7 @@ mem-bool x ( node xs y ) with nat-dec x y
 
 
 is-member : {n : Nat} → (x : Nat) → Hashset n → Bool
-is-member zero (hashset b nz) = {!   !}
-is-member (suc x) (hashset b nz) = {!   !} 
+is-member x (hashset b nz) = {!    !}
 
 
 -- inserting the same item more than once always produces the same hashset (i.e. subsequent insertions of 'x' will not change anything)

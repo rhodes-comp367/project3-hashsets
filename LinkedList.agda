@@ -7,6 +7,7 @@ module LinkedList where
 open import Agda.Builtin.Nat
 open import Agda.Builtin.Bool
 open import Agda.Builtin.Equality
+open import Data.Maybe
 
 data LinkedList (A : Set) : Set where
     [] : LinkedList A
@@ -38,11 +39,23 @@ nat-dec (suc m) (suc n) with nat-dec m n
 ... | no p = no (λ {refl → p refl})
 
 -- add a Nat to the list. 
-add : Nat → LinkedList Nat → LinkedList Nat -- ChatGPT suggested for me to use a function within to compare two values
+add : Nat → LinkedList Nat → LinkedList Nat
 add x [] = node [] x
 add e (node xs x) with nat-dec e x
 ... | yes _ = node xs x
 ... | no _ = node (add e xs) x
+
+-- clear all elements in linked list
+clear : LinkedList Nat → LinkedList Nat
+clear [] = []
+clear (node xs x) = []
+
+-- return an element
+get : Nat → LinkedList Nat → Maybe Nat
+get x [] = nothing
+get e (node xs x) with nat-dec e x 
+... | yes _ = just e
+... | no _ = get e xs
 
 -- check for existence of a Nat
 contains : Nat → LinkedList Nat → Bool
@@ -96,12 +109,6 @@ remove-contains n (node ns x) with nat-dec n x
 ... | yes _ = {!    !}
 ... | no ~e = {!   !}
 
-add-element : ∀ n ns → Element n (add n ns)
-add-element n [] = last
-add-element n (node ns x) with nat-dec n x 
-... | yes x₁ = {!   !}
-... | no _ = {!   !}
-
 -- removing and then adding gives back the same linked list
 remove-add : {x : Nat} → {xs : LinkedList Nat} → Element x xs → add x (remove x xs) ≡ xs
 remove-add {x} last with nat-dec x x
@@ -120,7 +127,12 @@ add-remove n (node xs x) p | yes refl with nat-dec n x
 ...   | no _ = ⊥-elim (p last)
 add-remove n (node xs x) p | no x₂ with nat-dec n x
 ...   | yes x₁ = ⊥-elim (x₂ x₁)
-...   | no ~e = add-remove {!   !} {!   !} {!   !}
+...   | no ~e = {!    !}
+
+-- clearing a linked list is the same as an empty one []
+clear-empty : (xs : LinkedList Nat) → [] ≡ clear xs
+clear-empty [] = refl
+clear-empty (node xs x) = refl
 
 -- Ellen's crashout ... ignore below
 -- checking if the numbers are equal + that we are removing the correct node 

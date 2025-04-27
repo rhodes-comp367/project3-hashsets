@@ -4,6 +4,7 @@ module Fin where
 
 open import Agda.Builtin.Nat
   using (Nat; suc; zero)
+open import Data.Maybe
 
 data Fin : Nat → Set where
   zero : ∀ {n}
@@ -15,10 +16,6 @@ data Fin : Nat → Set where
 maximum : {n : Nat} → Fin (suc n)
 maximum {zero} = zero
 maximum {suc n} = suc maximum
-
-data Maybe (A : Set) : Set where
-  nothing : Maybe A
-  just : A → Maybe A
 
 increment-maybe : {n : Nat} → Fin n → Maybe (Fin n)
 increment-maybe {suc zero} zero = nothing
