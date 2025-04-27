@@ -55,11 +55,13 @@ vec-apply (suc a) f (x ∷ xs) = x ∷ vec-apply a f xs
 put : {n : Nat} → (x : Nat) → Hashset n → Hashset n
 put x (hashset b nz) = hashset (vec-apply (hash-index x (hashset b nz)) (add x) b) nz
 
--- index :  {A : Set} {n : Nat} → Vec A n → Fin n → A
--- index x y  = {!   !} 
-
+-- Vec lookup
+index :  {A : Set} {n : Nat} → Vec A n → Fin n → A
+index (x ∷ xs) zero = x
+index (x ∷ xs) (suc y) = index xs y 
+ 
 retrieve : {n : Nat} → (x : Nat) → Hashset n → Maybe Nat
-retrieve x (hashset b nz) = get x {!   !}  
+retrieve x (hashset b nz) = get x (index b (hash-index x (hashset b nz)))
 
 -- retrieve x (hashset b nz) = x --umm.. 90% sure this is incorrect (ellen). This is indeed incorrect (matthew).
 
@@ -70,7 +72,7 @@ revoke x (hashset b nz) = hashset (vec-apply (hash-index x (hashset b nz)) (Link
 -- checking if in linkedlist 
 mem-bool :  Nat → LinkedList Nat → Bool
 mem-bool  x [] = false 
-mem-bool x ( node xs y ) with nat-dec x y 
+mem-bool x (node xs y) with nat-dec x y 
 ... | yes _ = true
 ... | no _ = mem-bool x xs 
 
