@@ -102,6 +102,18 @@ add-contains n (node ns x) | no _ with nat-dec n x
 ...   | yes _ = refl
 ...   | no ~e = add-contains n ns
 
+idempotency-again : (x : Nat) → (xs : LinkedList Nat) → add x (add x xs) ≡ add x xs
+idempotency-again x [] with nat-dec x x
+... | yes _ = refl
+... | no ~e = ⊥-elim (~e refl)
+idempotency-again e (node xs x) with nat-dec e x
+idempotency-again e (node xs x) | yes refl with nat-dec e x
+... | yes _ = refl
+... | no ~e = ⊥-elim (~e refl)
+idempotency-again e (node xs x) | no ~e with nat-dec e x 
+... | yes _ = refl
+... | no _ = {!    !} 
+
 -- remove-contains
 remove-contains : ∀ n ns → contains n (remove n ns) ≡ false 
 remove-contains n [] = refl

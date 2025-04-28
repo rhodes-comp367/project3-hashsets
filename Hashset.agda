@@ -41,13 +41,6 @@ mod (suc m) n = increment (mod m n)
 hash-index : {n : Nat} → (x : Nat) → Hashset n → Fin n 
 hash-index {suc n} x (hashset b nz) = mod x n
 
--- temp add function (taken from linkedlist) ...I kept forgetting what went into add (Ellen)   
-temp_add : Nat → LinkedList Nat → LinkedList Nat 
-temp_add x [] = node [] x
-temp_add e (node xs x) with nat-dec e x
-... | yes _ = node xs x
-... | no _ = node (add e xs) x
-
 vec-apply : {A : Set} → {n : Nat} → Fin n → (A → A) → Vec A n → Vec A n
 vec-apply zero f (x ∷ xs) = f x ∷ xs
 vec-apply (suc a) f (x ∷ xs) = x ∷ vec-apply a f xs
@@ -68,7 +61,6 @@ retrieve x (hashset b nz) = get x (index b (hash-index x (hashset b nz)))
 revoke : {n : Nat} → (x : Nat) → Hashset n → Hashset n
 revoke x (hashset b nz) = hashset (vec-apply (hash-index x (hashset b nz)) (LinkedList.remove x) b) nz
 
-
 -- checking if in linkedlist 
 mem-bool :  Nat → LinkedList Nat → Bool
 mem-bool  x [] = false 
@@ -76,12 +68,14 @@ mem-bool x (node xs y) with nat-dec x y
 ... | yes _ = true
 ... | no _ = mem-bool x xs 
 
-
 is-member : {n : Nat} → (x : Nat) → Hashset n → Bool
-is-member x (hashset b nz) = contains x {!   !}
+is-member x (hashset b nz) = mem-bool x (index b (hash-index x (hashset b nz)))
 
+put-is-member : {n : Nat} → (x : Nat) →  (ns : Hashset n) → is-member n (put n ns) ≡ true
+put-is-member x (hashset b nz) with nat-dec x x
+...| yes _ = {!    !} 
+...| no _ = {!   !} 
 
 -- inserting the same item more than once always produces the same hashset (i.e. subsequent insertions of 'x' will not change anything)
 idempotency : {n : Nat} → (x : Nat) → (hs : Hashset n) → put x (put x hs) ≡ put x hs
-idempotency zero a  = {!   !}
-idempotency (suc x) (hashset b nz) = {!   !}  
+idempotency a (hashset b nz)  = {!    !}
