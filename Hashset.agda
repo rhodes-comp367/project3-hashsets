@@ -29,6 +29,9 @@ record Hashset (n : Nat) : Set where  -- n represents the capacity
         buckets : Vec (LinkedList Nat) n -- Vec's that store the linked lists  
         not-zero : 1 ≤ n -- the capacity must be at least 1
 -- hash-index 2 (hashset ((node (node [] 15) 5) ∷ (node [] 20) ∷ ((node [] 10) ∷ [])) (1≤3))
+
+-- return the index that the new set member should be placed in
+-- since we're only storing Nats, the hash code is simply the Nat, and we use mod to compute the bucket/index to store it in
 mod : Nat → (n : Nat) → Fin (suc n)
 mod zero _ = zero
 mod (suc m) n = increment (mod m n)
@@ -36,17 +39,12 @@ mod (suc m) n = increment (mod m n)
 1≤3 : suc zero ≤ suc (suc (suc zero))
 1≤3 = s≤s z≤n
 
--- return the index that the new set member should be placed in
--- since we're only storing Nats, the hash code is simply the Nat, and we use mod to compute the bucket/index to store it in
-hash-index : {n : Nat} → (x : Nat) → Hashset n → Fin n 
-hash-index {suc n} x (hashset b nz) = mod x n
-
 vec-apply : {A : Set} → {n : Nat} → Fin n → (A → A) → Vec A n → Vec A n
 vec-apply zero f (x ∷ xs) = f x ∷ xs
 vec-apply (suc a) f (x ∷ xs) = x ∷ vec-apply a f xs
 
 put : {n : Nat} → (x : Nat) → Hashset n → Hashset n
-put x (hashset b nz) = hashset (vec-apply (hash-index x (hashset b nz)) (add x) b) nz
+put {suc n} x (hashset b nz) = hashset (vec-apply (mod x n) (add x) b) nz
 
 -- Vec lookup
 index :  {A : Set} {n : Nat} → Vec A n → Fin n → A
@@ -54,12 +52,12 @@ index (x ∷ xs) zero = x
 index (x ∷ xs) (suc y) = index xs y 
  
 retrieve : {n : Nat} → (x : Nat) → Hashset n → Maybe Nat
-retrieve x (hashset b nz) = get x (index b (hash-index x (hashset b nz)))
+retrieve {suc n} x (hashset b nz) = get x (index b (mod x n))
 
 -- retrieve x (hashset b nz) = x --umm.. 90% sure this is incorrect (ellen). This is indeed incorrect (matthew).
 
 revoke : {n : Nat} → (x : Nat) → Hashset n → Hashset n
-revoke x (hashset b nz) = hashset (vec-apply (hash-index x (hashset b nz)) (LinkedList.remove x) b) nz
+revoke {suc n} x (hashset b nz) = hashset (vec-apply (mod x n) (LinkedList.remove x) b) nz
 
 -- checking if in linkedlist 
 mem-bool :  Nat → LinkedList Nat → Bool
@@ -69,12 +67,18 @@ mem-bool x (node xs y) with nat-dec x y
 ... | no _ = mem-bool x xs 
 
 is-member : {n : Nat} → (x : Nat) → Hashset n → Bool
-is-member x (hashset b nz) = mem-bool x (index b (hash-index x (hashset b nz)))
+is-member {suc n} x (hashset b nz) = contains x (index b (mod x n))
 
-put-is-member : {n : Nat} → (x : Nat) →  (ns : Hashset n) → is-member n (put n ns) ≡ true
-put-is-member x (hashset b nz) with nat-dec x x
-...| yes _ = {!    !}
-...| no _ = {!   !} 
+-- 'A → A' represents 'LinkedList Nat → LinkedList Nat'
+index-vec-apply : {A : Set} → {n : Nat} → (k : Fin n) → (f : A → A) → (xs : Vec A n)
+  → index (vec-apply k f xs) k ≡ f (index xs k)
+index-vec-apply zero f (x ∷ xs) = refl
+index-vec-apply (suc k) f (x ∷ xs) = index-vec-apply k f xs
+
+put-is-member : {n : Nat} → (x : Nat) → (ns : Hashset n) → is-member x (put x ns) ≡ true
+put-is-member {suc _} x (hashset b nz) = {!    !} -- with nat-dec x x
+-- ...| yes _ = {!    !}
+-- ...| no _ = {!   !} 
 
 -- inserting the same item more than once always produces the same hashset (i.e. subsequent insertions of 'x' will not change anything)
 idempotency : {n : Nat} → (x : Nat) → (hs : Hashset n) → put x (put x hs) ≡ put x hs

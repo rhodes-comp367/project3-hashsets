@@ -139,7 +139,7 @@ add-remove n (node xs x) p | yes refl with nat-dec n x
 ...   | no _ = ⊥-elim (p last)
 add-remove n (node xs x) p | no x₂ with nat-dec n x
 ...   | yes x₁ = ⊥-elim (x₂ x₁)
-...   | no ~e rewrite add-remove n xs {!   !} = {!    !}
+...   | no ~e rewrite add-remove n xs {!   !} = {!   !}
 
 -- clearing a linked list is the same as an empty one []
 clear-empty : (xs : LinkedList Nat) → [] ≡ clear xs
