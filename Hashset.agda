@@ -73,7 +73,7 @@ is-member x (hashset b nz) = mem-bool x (index b (hash-index x (hashset b nz)))
 
 put-is-member : {n : Nat} → (x : Nat) →  (ns : Hashset n) → is-member n (put n ns) ≡ true
 put-is-member x (hashset b nz) with nat-dec x x
-...| yes _ = {!    !} 
+...| yes _ = {!    !}
 ...| no _ = {!   !} 
 
 -- inserting the same item more than once always produces the same hashset (i.e. subsequent insertions of 'x' will not change anything)

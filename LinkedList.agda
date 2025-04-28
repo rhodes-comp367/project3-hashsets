@@ -76,17 +76,17 @@ remove e (node xs x) with nat-dec e x
 ... | no _ = node (remove e xs) x
 
 -- removing the first item from a list  
-removeFirst : LinkedList Nat → LinkedList Nat
-removeFirst [] = []
-removeFirst (node [] x) = []
-removeFirst (node xs x) = node (removeFirst xs) x
+remove-first : LinkedList Nat → LinkedList Nat
+remove-first [] = []
+remove-first (node [] x) = []
+remove-first (node xs x) = node (remove-first xs) x
 
 --removing the last item from a list (x) 
-removeLast : LinkedList Nat → LinkedList Nat
-removeLast [] = [] 
-removeLast (node xs x) = xs 
+remove-last : LinkedList Nat → LinkedList Nat
+remove-last [] = [] 
+remove-last (node xs x) = xs 
 
-remove-last-node : (x : Nat) → (xs : LinkedList Nat) → xs ≡ (removeLast (node xs x))
+remove-last-node : (x : Nat) → (xs : LinkedList Nat) → xs ≡ (remove-last (node xs x))
 remove-last-node _ _ = refl
 
 -- linked list contains element after being added in 
@@ -102,17 +102,17 @@ add-contains n (node ns x) | no _ with nat-dec n x
 ...   | yes _ = refl
 ...   | no ~e = add-contains n ns
 
-idempotency-again : (x : Nat) → (xs : LinkedList Nat) → add x (add x xs) ≡ add x xs
-idempotency-again x [] with nat-dec x x
+idempotency-ll : (x : Nat) → (xs : LinkedList Nat) → add x (add x xs) ≡ add x xs
+idempotency-ll x [] with nat-dec x x
 ... | yes _ = refl
 ... | no ~e = ⊥-elim (~e refl)
-idempotency-again e (node xs x) with nat-dec e x
-idempotency-again e (node xs x) | yes refl with nat-dec e x
+idempotency-ll e (node xs x) with nat-dec e x
+idempotency-ll e (node xs x) | yes refl with nat-dec e x
 ... | yes _ = refl
 ... | no ~e = ⊥-elim (~e refl)
-idempotency-again e (node xs x) | no ~e with nat-dec e x 
+idempotency-ll e (node xs x) | no ~e with nat-dec e x 
 ... | yes _ = refl
-... | no _ = {!    !} 
+... | no x₁ rewrite idempotency-ll e xs = refl
 
 -- remove-contains
 remove-contains : ∀ n ns → contains n (remove n ns) ≡ false 
@@ -124,7 +124,7 @@ remove-contains n (node ns x) with nat-dec n x
 -- removing and then adding gives back the same linked list
 remove-add : {x : Nat} → {xs : LinkedList Nat} → Element x xs → add x (remove x xs) ≡ xs
 remove-add {x} last with nat-dec x x
-... | yes _ = {!    !}
+... | yes _ = {!   !}
 ... | no _ = {!   !}
 remove-add (init x) = {!   !}
 
@@ -139,30 +139,10 @@ add-remove n (node xs x) p | yes refl with nat-dec n x
 ...   | no _ = ⊥-elim (p last)
 add-remove n (node xs x) p | no x₂ with nat-dec n x
 ...   | yes x₁ = ⊥-elim (x₂ x₁)
-...   | no ~e = {!    !}
+...   | no ~e rewrite add-remove n xs {!   !} = {!    !}
 
 -- clearing a linked list is the same as an empty one []
 clear-empty : (xs : LinkedList Nat) → [] ≡ clear xs
 clear-empty [] = refl
 clear-empty (node xs x) = refl
-
--- Ellen's crashout ... ignore below
--- checking if the numbers are equal + that we are removing the correct node 
--- mostly chat code, and noting here that we may have problems if there are nodes with same Nats
-
--- natEq : Nat → Nat → Bool 
--- natEq zero zero = true
--- natEq (suc n) (suc m) = natEq n m
--- natEq _ _ = false
-
--- removeFirst : {A : Set} → (x : A) → (xs : LinkedList A) → (A → A → Bool) → LinkedList A -- chat helped me figure out the starting cases
--- base case
--- removeFirst x [] natEq = []
--- removing element in end of list 
--- removeFirst x (y :: ys) natEq with natEq x y
--- ... | true  = ys
--- ... | false = y :: remove x ys natEq
-
--- removing element at end of list 
--- removing element in the middle of list 
  
