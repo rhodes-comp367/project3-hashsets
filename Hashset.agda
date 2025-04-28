@@ -59,12 +59,6 @@ retrieve {suc n} x (hashset b nz) = get x (index b (mod x n))
 revoke : {n : Nat} → (x : Nat) → Hashset n → Hashset n
 revoke {suc n} x (hashset b nz) = hashset (vec-apply (mod x n) (LinkedList.remove x) b) nz
 
--- checking if in linkedlist 
-mem-bool :  Nat → LinkedList Nat → Bool
-mem-bool  x [] = false 
-mem-bool x (node xs y) with nat-dec x y 
-... | yes _ = true
-... | no _ = mem-bool x xs 
 
 is-member : {n : Nat} → (x : Nat) → Hashset n → Bool
 is-member {suc n} x (hashset b nz) = contains x (index b (mod x n))
@@ -76,10 +70,9 @@ index-vec-apply zero f (x ∷ xs) = refl
 index-vec-apply (suc k) f (x ∷ xs) = index-vec-apply k f xs
 
 put-is-member : {n : Nat} → (x : Nat) → (ns : Hashset n) → is-member x (put x ns) ≡ true
-put-is-member {suc _} x (hashset b nz) = {!    !} -- with nat-dec x x
--- ...| yes _ = {!    !}
--- ...| no _ = {!   !} 
+put-is-member {suc n} x (hashset b nz) rewrite index-vec-apply (mod x n) (add x) b | add-contains x (index b (mod x n)) = refl
+
 
 -- inserting the same item more than once always produces the same hashset (i.e. subsequent insertions of 'x' will not change anything)
 idempotency : {n : Nat} → (x : Nat) → (hs : Hashset n) → put x (put x hs) ≡ put x hs
-idempotency a (hashset b nz)  = {!    !}
+idempotency {suc n} x (hashset b nz) = ?
