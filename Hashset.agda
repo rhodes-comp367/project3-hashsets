@@ -56,10 +56,11 @@ retrieve {suc n} x (hashset b nz) = get x (index b (mod x n))
 
 -- retrieve x (hashset b nz) = x --umm.. 90% sure this is incorrect (ellen). This is indeed incorrect (matthew).
 
+-- remove function
 revoke : {n : Nat} → (x : Nat) → Hashset n → Hashset n
 revoke {suc n} x (hashset b nz) = hashset (vec-apply (mod x n) (LinkedList.remove x) b) nz
 
-
+-- contains function
 is-member : {n : Nat} → (x : Nat) → Hashset n → Bool
 is-member {suc n} x (hashset b nz) = contains x (index b (mod x n))
 
@@ -69,10 +70,15 @@ index-vec-apply : {A : Set} → {n : Nat} → (k : Fin n) → (f : A → A) → 
 index-vec-apply zero f (x ∷ xs) = refl
 index-vec-apply (suc k) f (x ∷ xs) = index-vec-apply k f xs
 
+-- element should be a member of hashset once put in
 put-is-member : {n : Nat} → (x : Nat) → (ns : Hashset n) → is-member x (put x ns) ≡ true
 put-is-member {suc n} x (hashset b nz) rewrite index-vec-apply (mod x n) (add x) b | add-contains x (index b (mod x n)) = refl
 
+-- removing a member of the hashset then checking for membership should return false
+revoke-is-member : {n : Nat} → (x : Nat) → (ns : Hashset n) → is-member x (revoke x ns) ≡ false
+revoke-is-member {suc n} x (hashset b nz) rewrite index-vec-apply (mod x n) (LinkedList.remove x) b | remove-contains x (index b (mod x n)) = refl
 
 -- inserting the same item more than once always produces the same hashset (i.e. subsequent insertions of 'x' will not change anything)
 idempotency : {n : Nat} → (x : Nat) → (hs : Hashset n) → put x (put x hs) ≡ put x hs
-idempotency {suc n} x (hashset b nz) = ?
+idempotency {suc n} x (hashset b nz) = {!    !}
+ 
