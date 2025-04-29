@@ -15,5 +15,5 @@ We used Agda builtin libraries such as Nat, Bool, Equality, and Data.maybe. We a
 
 **Discuss any challenges, or anything you'd like feedback on.**
 Our main challenge was trying to set up the entire project as the idea of proving how hash set worked took a while to map out. Another challenge we had was trying to debug our definitions and holes. Because of how busy the projects got and the collective struggle to debug, I also realized you were very busy and was hard having a second to ask questions. 
-
+NOTE: in LinkedList, I had to keep in remove-contains (even though it's not complete) for a proof in Hashset (see revoke-is-member).
 

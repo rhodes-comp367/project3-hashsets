@@ -36,6 +36,7 @@ mod : Nat → (n : Nat) → Fin (suc n)
 mod zero _ = zero
 mod (suc m) n = increment (mod m n)
 
+-- test function when I was testing hash-index
 1≤3 : suc zero ≤ suc (suc (suc zero))
 1≤3 = s≤s z≤n
 
@@ -78,7 +79,11 @@ put-is-member {suc n} x (hashset b nz) rewrite index-vec-apply (mod x n) (add x)
 revoke-is-member : {n : Nat} → (x : Nat) → (ns : Hashset n) → is-member x (revoke x ns) ≡ false
 revoke-is-member {suc n} x (hashset b nz) rewrite index-vec-apply (mod x n) (LinkedList.remove x) b | remove-contains x (index b (mod x n)) = refl
 
+-- revoking then retrieving should return nothing
+-- revoke-retrieve : {n : Nat} → (x : Nat) → (ns : Hashset n) → retrieve x (revoke x ns) ≡ nothing
+-- revoke-retrieve {suc n} x (hashset b nz) rewrite index-vec-apply (mod x n) {!   !} {!   !} = {!    !}
+
 -- inserting the same item more than once always produces the same hashset (i.e. subsequent insertions of 'x' will not change anything)
-idempotency : {n : Nat} → (x : Nat) → (hs : Hashset n) → put x (put x hs) ≡ put x hs
-idempotency {suc n} x (hashset b nz) = {!    !}
- 
+-- idempotency : {n : Nat} → (x : Nat) → (hs : Hashset n) → put x (put x hs) ≡ put x hs
+-- idempotency {suc n} x (hashset b nz) = {!    !}
+  

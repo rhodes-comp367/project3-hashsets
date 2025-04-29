@@ -57,9 +57,9 @@ get e (node xs x) with nat-dec e x
 ... | yes _ = just e
 ... | no _ = get e xs
 
-contains' : (x : Nat) → (xs : LinkedList Nat) → Dec (Element x xs)
-contains' x [] = no (λ ())
-contains' x (node xs x₁) = yes {!    !}
+-- contains' : (x : Nat) → (xs : LinkedList Nat) → Dec (Element x xs)
+-- contains' x [] = no (λ ())
+-- contains' x (node xs x₁) = yes {!    !}
 
 
 -- check for existence of a Nat
@@ -120,6 +120,7 @@ idempotency-ll e (node xs x) | no ~e with nat-dec e x
 ... | no x₁ rewrite idempotency-ll e xs = refl
 
 -- remove-contains
+-- NOTE: I needed to keep this in (even though it's not completed) for a proof in Hashset (revoke-is-member)
 remove-contains : ∀ n ns → contains n (remove n ns) ≡ false 
 remove-contains n [] = refl
 remove-contains n (node ns x) with nat-dec n x 
@@ -127,24 +128,24 @@ remove-contains n (node ns x) with nat-dec n x
 ... | no ~e = {!    !}
 
 -- removing and then adding gives back the same linked list
-remove-add : {x : Nat} → {xs : LinkedList Nat} → Element x xs → add x (remove x xs) ≡ xs
-remove-add {x} last with nat-dec x x
-... | yes _ = {!   !}
-... | no _ = {!   !}
-remove-add (init x) = {!   !}
+-- remove-add : {x : Nat} → {xs : LinkedList Nat} → Element x xs → add x (remove x xs) ≡ xs
+-- remove-add {x} last with nat-dec x x
+-- ... | yes _ = {!   !}
+-- ... | no _ = {!   !}
+-- remove-add (init x) = {!   !}
 
 -- adding then removing returns the same linked list
-add-remove : (x : Nat) → (xs : LinkedList Nat) → ~ (Element x xs) → xs ≡ remove x (add x xs)
-add-remove x [] p with nat-dec x x 
-... | yes _ = refl
-... | no ~e = ⊥-elim (~e refl)
-add-remove n (node xs x) p with nat-dec n x
-add-remove n (node xs x) p | yes refl with nat-dec n x
-...   | yes _ = ⊥-elim (p last)
-...   | no _ = ⊥-elim (p last)
-add-remove n (node xs x) p | no x₂ with nat-dec n x
-...   | yes x₁ = ⊥-elim (x₂ x₁)
-...   | no ~e rewrite add-remove n xs {!    !} = {!    !}
+-- add-remove : (x : Nat) → (xs : LinkedList Nat) → ~ (Element x xs) → xs ≡ remove x (add x xs)
+-- add-remove x [] p with nat-dec x x 
+-- ... | yes _ = refl
+-- ... | no ~e = ⊥-elim (~e refl)
+-- add-remove n (node xs x) p with nat-dec n x
+-- add-remove n (node xs x) p | yes refl with nat-dec n x
+-- ...   | yes _ = ⊥-elim (p last)
+-- ...   | no _ = ⊥-elim (p last)
+-- add-remove n (node xs x) p | no x₂ with nat-dec n x
+-- ...   | yes x₁ = ⊥-elim (x₂ x₁)
+-- ...   | no ~e rewrite add-remove n xs {!    !} = {!    !}
 
 -- clearing a linked list is the same as an empty one []
 clear-empty : (xs : LinkedList Nat) → [] ≡ clear xs
